@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* globals.css — cooler palette, still pulled from the desk scene */
+:root {
+  --paper: #e7eae4;       /* soft sage-grey, from the desk mat */
+  --card: #f2f4ee;
+  --ink: #23262b;         /* cool near-black instead of warm brown-black */
+  --ink-soft: #6b7078;
+  --line: #d2d7cd;
+
+  --ledger: #33516a;      /* wall panel blue — now the primary accent */
+  --lilac: #b7a6dd;       /* lanyard strap — secondary accent */
+  --moss: #6c7a52;        /* books/plant */
+  --tea: #b98b64;         /* teacup — used sparingly now, not as base */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
