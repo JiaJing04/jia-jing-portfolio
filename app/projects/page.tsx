@@ -11,10 +11,7 @@ const projects = [
     ],
     image: "/smart-classroom.png",
     imageAlt: "Academic Dashboard Website project",
-    links: [
-      // { label: "Code", href: "#" },
-      // { label: "Demo", href: "#" },
-    ],
+    links: [],
   },
 
   {
@@ -28,9 +25,7 @@ const projects = [
     ],
     image: "/ticket-to-ride.png", 
     imageAlt: "Ticket to Ride Java Application project",
-    links: [
-      // { label: "Code", href: "#" },
-    ],
+    links: [],
   },
 
   {
@@ -45,7 +40,6 @@ const projects = [
     image: "/guitar-hero.png",
     imageAlt: "Guitar Hero rhythm game project",
     links: [
-      // { label: "Code", href: "#" },
       { label: "Demo", href: "#" },
     ],
   },
@@ -60,9 +54,7 @@ const projects = [
     ],
     image: "/elden-thing.png",
     imageAlt: "Elden Thing roguelike game project",
-    links: [
-      // { label: "Code", href: "#" },
-    ],
+    links: [],
   },
 
   {
@@ -76,26 +68,8 @@ const projects = [
     ],
     image: "/kanban.png",
     imageAlt: "Kanban Task Manager project",
-    links: [
-      // { label: "Code", href: "#" },
-    ],
+    links: [],
   },
-
-  // {
-  //   name: "Run Monash Database System",
-  //   desc: "A database system designed around a real-world case study, combining Oracle SQL and MongoDB to support complex requirements across relational and non-relational data.",
-  //   tags: [
-  //     "Oracle SQL",
-  //     "MongoDB",
-  //     "PL/SQL",
-  //   ],
-  //   image: "/projects/run-monash.png",
-  //   imageAlt: "Run Monash Database System project",
-  //   links: [
-  //     // { label: "Code", href: "#" },
-  //   ],
-  // },
-  
 ];
 
 export default function Projects() {

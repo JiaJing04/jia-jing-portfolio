@@ -17,7 +17,6 @@ import PostmanOriginalIcon from "react-devicons/postman/original";
 import Html5OriginalIcon from "react-devicons/html5/original";
 import Css3OriginalIcon from "react-devicons/css3/original";
 import MongodbOriginalIcon from "react-devicons/mongodb/original";
-import PostgresqlOriginalIcon from "react-devicons/postgresql/original";
 
 /* =========================================================
    GENERIC ICON TYPES

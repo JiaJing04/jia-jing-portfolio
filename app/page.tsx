@@ -1,15 +1,4 @@
-import Link from "next/link";
-import dynamic from "next/dynamic";
-
-const DeveloperWorld = dynamic(
-  () => import("@/components/DeveloperWorld"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full h-[430px] sm:h-[500px]" />
-    ),
-  }
-);
+import DeveloperWorld from "@/components/DeveloperWorldLoader";
 
 export default function Home() {
   return (
@@ -27,39 +16,6 @@ export default function Home() {
             I build software, solve problems, and have a questionable relationship with hot Milo.
           </p>
 
-          {/* <div className="flex justify-center gap-3 mt-8">
-            <Link
-              href="/projects"
-              className="
-                px-5
-                py-2.5
-                rounded-full
-                bg-ink
-                text-paper
-                text-[13px]
-                hover:opacity-80
-                transition
-              "
-            >
-              See the work
-            </Link>
-
-            <Link
-              href="/about"
-              className="
-                px-5
-                py-2.5
-                rounded-full
-                border
-                border-line
-                text-[13px]
-                hover:border-ink
-                transition
-              "
-            >
-              About me
-            </Link>
-          </div> */}
         </div>
 
         {/* 3D developer world */}
