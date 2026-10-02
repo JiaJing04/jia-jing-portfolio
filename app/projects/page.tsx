@@ -1,4 +1,11 @@
-const projects = [
+const projects: {
+  name: string;
+  desc: string;
+  tags: string[];
+  image: string;
+  imageAlt: string;
+  links: { label: string; href: string }[];
+}[] = [
   {
     name: "Academic Dashboard Website",
     desc: "A classroom analytics platform that transforms lecturer-uploaded datasets into interactive dashboards and reports, covering attendance, engagement, and at-risk student analysis.",
@@ -40,7 +47,7 @@ const projects = [
     image: "/guitar-hero.png",
     imageAlt: "Guitar Hero rhythm game project",
     links: [
-      { label: "Demo", href: "#" },
+      // { label: "Demo", href: "#" },
     ],
   },
 
