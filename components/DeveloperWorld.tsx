@@ -264,8 +264,17 @@ function Laptop() {
    ========================================================= */
 
 function TeaCup() {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <group position={[-2.25, 0, 0.5]}>
+    <group
+      position={[-2.25, 0, 0.5]}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setHovered(true);
+      }}
+      onPointerOut={() => setHovered(false)}
+    >
       {/* saucer */}
 
       <mesh
@@ -343,6 +352,19 @@ function TeaCup() {
           />
         </mesh>
       </group>
+
+      {hovered && (
+        <Html
+          position={[0, 0.85, 0]}
+          center
+          zIndexRange={[30, 0]}
+          pointerEvents="none"
+        >
+          <div role="tooltip" className="pointer-events-none select-none whitespace-nowrap rounded-full bg-ink px-3.5 py-1.5 text-[12px] text-paper shadow-lg">
+            Fun fact: I love Milo
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
@@ -822,6 +844,86 @@ function PhotoStrip({
           </mesh>
         );
       })}
+    </group>
+  );
+}
+
+
+function PhotoStrips() {
+  const [hovered, setHovered] = useState(false);
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showCard = () => {
+    if (hideTimer.current) clearTimeout(hideTimer.current);
+    setHovered(true);
+  };
+
+  const hideCard = () => {
+    if (hideTimer.current) clearTimeout(hideTimer.current);
+    hideTimer.current = setTimeout(() => setHovered(false), 400);
+  };
+
+  useEffect(() => () => {
+    if (hideTimer.current) clearTimeout(hideTimer.current);
+  }, []);
+
+  return (
+    <group
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        showCard();
+      }}
+      onPointerOut={hideCard}
+    >
+      <PhotoStrip
+        position={[1.0, 1.2, -1.94]}
+        rotation={-0.05}
+        photoColors={[
+          "#ecb9ae",
+          "#c3b5e3",
+          "#a9c4d9",
+          "#f0d9c9",
+        ]}
+      />
+
+      <PhotoStrip
+        position={[1.44, 1.25, -1.94]}
+        rotation={0.07}
+        photoColors={[
+          "#d6cfd6",
+          "#ecb9ae",
+          "#c3b5e3",
+          "#a9c4d9",
+        ]}
+      />
+
+      {hovered && (
+        <Html
+          position={[1.22, 2.2, -1.89]}
+          center
+          zIndexRange={[30, 0]}
+          pointerEvents="auto"
+        >
+          <div
+            onPointerEnter={showCard}
+            onPointerLeave={hideCard}
+            onFocus={showCard}
+            onBlur={hideCard}
+            className="w-64 max-w-[80vw] rounded-2xl bg-ink px-3.5 py-2.5 text-center text-[12px] leading-relaxed text-paper shadow-lg"
+          >
+            I can never resist a photobooth! I built Pocket Memories to bring
+            a little of that magic with me wherever I go.
+            <a
+              href="https://pocket-memories-one.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 block font-medium underline underline-offset-4 hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+            >
+              Try Pocket Memories ↗
+            </a>
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
@@ -1672,27 +1774,7 @@ function World() {
             PHOTO STRIPS
             ================================================= */}
 
-        <PhotoStrip
-          position={[1.0, 1.2, -1.94]}
-          rotation={-0.05}
-          photoColors={[
-            "#ecb9ae",
-            "#c3b5e3",
-            "#a9c4d9",
-            "#f0d9c9",
-          ]}
-        />
-
-        <PhotoStrip
-          position={[1.44, 1.25, -1.94]}
-          rotation={0.07}
-          photoColors={[
-            "#d6cfd6",
-            "#ecb9ae",
-            "#c3b5e3",
-            "#a9c4d9",
-          ]}
-        />
+        <PhotoStrips />
 
         {/* =================================================
             DESK OBJECTS
