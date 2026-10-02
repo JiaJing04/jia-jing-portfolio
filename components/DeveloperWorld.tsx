@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  createContext,
+  useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -24,6 +26,21 @@ import * as THREE from "three";
    ========================================================= */
 
 type V3 = [number, number, number];
+
+const TouchSelectionContext = createContext<{
+  selected: string | null;
+  select: (id: string | null) => void;
+}>({ selected: null, select: () => {} });
+
+// Touch selection persists after pointer-out and is shared across the scene.
+function useTouchSelection(id: string) {
+  const { selected, select } = useContext(TouchSelectionContext);
+  return {
+    tapped: selected === id,
+    select: () => select(id),
+    toggle: () => select(selected === id ? null : id),
+  };
+}
 
 const C = {
   desk: "#e4e0d5",
@@ -265,15 +282,24 @@ function Laptop() {
 
 function TeaCup() {
   const [hovered, setHovered] = useState(false);
+  const touch = useTouchSelection("tea");
+  const touchPointer = useRef(false);
 
   return (
     <group
       position={[-2.25, 0, 0.5]}
       onPointerOver={(e) => {
         e.stopPropagation();
-        setHovered(true);
+        if (e.pointerType === "mouse") setHovered(true);
       }}
       onPointerOut={() => setHovered(false)}
+      onPointerDown={(e) => {
+        touchPointer.current = e.pointerType !== "mouse";
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (touchPointer.current) touch.toggle();
+      }}
     >
       {/* saucer */}
 
@@ -353,7 +379,7 @@ function TeaCup() {
         </mesh>
       </group>
 
-      {hovered && (
+      {(hovered || touch.tapped) && (
         <Html
           position={[0, 0.85, 0]}
           center
@@ -851,6 +877,8 @@ function PhotoStrip({
 
 function PhotoStrips() {
   const [hovered, setHovered] = useState(false);
+  const touch = useTouchSelection("photos");
+  const touchPointer = useRef(false);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showCard = () => {
@@ -871,9 +899,16 @@ function PhotoStrips() {
     <group
       onPointerOver={(e) => {
         e.stopPropagation();
-        showCard();
+        if (e.pointerType === "mouse") showCard();
       }}
       onPointerOut={hideCard}
+      onPointerDown={(e) => {
+        touchPointer.current = e.pointerType !== "mouse";
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (touchPointer.current) touch.toggle();
+      }}
     >
       <PhotoStrip
         position={[1.0, 1.2, -1.94]}
@@ -897,7 +932,7 @@ function PhotoStrips() {
         ]}
       />
 
-      {hovered && (
+      {(hovered || touch.tapped) && (
         <Html
           position={[1.22, 2.2, -1.89]}
           center
@@ -905,7 +940,9 @@ function PhotoStrips() {
           pointerEvents="auto"
         >
           <div
-            onPointerEnter={showCard}
+            onPointerEnter={(e) => {
+              if (e.pointerType === "mouse") showCard();
+            }}
             onPointerLeave={hideCard}
             onFocus={showCard}
             onBlur={hideCard}
@@ -1482,6 +1519,8 @@ function Hoverable({
   children: ReactNode;
 }) {
   const router = useRouter();
+  const touch = useTouchSelection(href);
+  const touchPointer = useRef(false);
 
   const [hovered, setHovered] =
     useState(false);
@@ -1505,7 +1544,7 @@ function Hoverable({
 
     const next = THREE.MathUtils.damp(
       g.scale.x,
-      hovered ? hoverScale : 1,
+      hovered || touch.tapped ? hoverScale : 1,
       8,
       delta
     );
@@ -1520,14 +1559,22 @@ function Hoverable({
         position={pivot}
         onPointerOver={(e) => {
           e.stopPropagation();
-          setHovered(true);
+          if (e.pointerType === "mouse") setHovered(true);
           router.prefetch(href);
         }}
         onPointerOut={() =>
           setHovered(false)
         }
+        onPointerDown={(e) => {
+          touchPointer.current = e.pointerType !== "mouse";
+        }}
         onClick={(e) => {
           e.stopPropagation();
+          if (touchPointer.current && !touch.tapped) {
+            touch.select();
+            router.prefetch(href);
+            return;
+          }
           router.push(href);
         }}
       >
@@ -1542,7 +1589,7 @@ function Hoverable({
         </group>
       </group>
 
-      {hovered && (
+      {(hovered || touch.tapped) && (
         <Html
           position={labelPosition}
           center
@@ -1550,7 +1597,7 @@ function Hoverable({
           pointerEvents="none"
         >
           <div className="pointer-events-none select-none whitespace-nowrap rounded-full bg-ink px-3.5 py-1.5 text-[12px] text-paper shadow-lg">
-            {label}
+            {touch.tapped ? label.replace(/^Click/, "Tap again") : label}
           </div>
         </Html>
       )}
@@ -1847,27 +1894,41 @@ function World() {
    ========================================================= */
 
 export default function DeveloperWorld() {
+  const [selected, select] = useState<string | null>(null);
+  const container = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const dismissOutside = (event: PointerEvent) => {
+      if (!container.current?.contains(event.target as Node)) select(null);
+    };
+    document.addEventListener("pointerdown", dismissOutside);
+    return () => document.removeEventListener("pointerdown", dismissOutside);
+  }, []);
+
   return (
-    <div className="w-full h-[430px] sm:h-[500px]">
-      <Canvas
-        shadows
-        flat
-        dpr={[1, 2]}
-        camera={{
-          position: [3.4, 4.0, 8.6],
-          fov: 38,
-        }}
-        gl={{
-          alpha: true,
-          antialias: true,
-        }}
-        style={{
-          touchAction: "pan-y",
-        }}
-      >
-        {/* transparent canvas */}
-        <World />
-      </Canvas>
-    </div>
+    <TouchSelectionContext.Provider value={{ selected, select }}>
+      <div ref={container} className="w-full h-[430px] sm:h-[500px]">
+        <Canvas
+          onPointerMissed={() => select(null)}
+          shadows
+          flat
+          dpr={[1, 2]}
+          camera={{
+            position: [3.4, 4.0, 8.6],
+            fov: 38,
+          }}
+          gl={{
+            alpha: true,
+            antialias: true,
+          }}
+          style={{
+            touchAction: "pan-y",
+          }}
+        >
+          {/* transparent canvas */}
+          <World />
+        </Canvas>
+      </div>
+    </TouchSelectionContext.Provider>
   );
 }

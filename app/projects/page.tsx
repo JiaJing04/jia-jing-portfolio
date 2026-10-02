@@ -1,9 +1,10 @@
 const projects: {
   name: string;
   desc: string;
+  date?: string;
   tags: string[];
-  image: string;
-  imageAlt: string;
+  image?: string;
+  imageAlt?: string;
   links: { label: string; href: string }[];
 }[] = [
   {
@@ -32,7 +33,20 @@ const projects: {
     ],
     image: "/ticket-to-ride.png", 
     imageAlt: "Ticket to Ride Java Application project",
-    links: [],
+    links: [
+      { label: "Code", href: "https://github.com/JiaJing04/Ticket-To-Ride" },
+    ],
+  },
+
+  {
+    name: "Run Monash Database System",
+    desc: "A database system built around a real-world case study, using Oracle SQL and PL/SQL functions, triggers, and stored procedures to enforce business rules and data integrity. Populated and queried Oracle and MongoDB databases to meet complex user requirements, applying relational algebra, transaction management, and JSON document transformation across relational and non-relational models.",
+    tags: ["Oracle SQL", "MongoDB", "PL/SQL"],
+    image: "/run-monash.png", 
+    imageAlt: "Run Monash Database System",
+    links: [
+      { label: "Code", href: "https://github.com/JiaJing04/Run-Monash-Database-System" },
+    ],
   },
 
   {
@@ -61,7 +75,9 @@ const projects: {
     ],
     image: "/elden-thing.png",
     imageAlt: "Elden Thing roguelike game project",
-    links: [],
+    links: [
+      { label: "Code", href: "https://github.com/JiaJing04/Elden-Thing" },
+    ],
   },
 
   {
@@ -80,6 +96,9 @@ const projects: {
 ];
 
 export default function Projects() {
+  const featuredProjects = projects.slice(0, 3);
+  const otherProjects = projects.slice(3);
+
   return (
     <main className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-12 py-14 sm:py-16">
       {/* Header */}
@@ -89,26 +108,24 @@ export default function Projects() {
         </h1>
 
         <p className="text-ink-soft text-[15px] leading-relaxed max-w-[58ch]">
-          A few things I&apos;ve built to explore software, systems, and
-          the parts of computing I enjoy understanding from the inside out.
+          A few things I&apos;ve built while exploring software and systems.
         </p>
       </div>
 
       {/* Projects */}
       <div className="space-y-12">
-        {projects.map((project, index) => (
+        {featuredProjects.map((project, index) => (
           <article
             key={project.name}
             className={`
               grid
-              md:grid-cols-[minmax(0,1fr)_360px]
-              lg:grid-cols-[minmax(0,1fr)_420px]
+              ${project.image ? "md:grid-cols-[minmax(0,1fr)_360px] lg:grid-cols-[minmax(0,1fr)_420px]" : ""}
               gap-8
               lg:gap-14
               items-center
               pb-12
               ${
-                index !== projects.length - 1
+                index !== featuredProjects.length - 1
                   ? "border-b border-line"
                   : ""
               }
@@ -127,6 +144,12 @@ export default function Projects() {
               <h2 className="font-serif text-[23px] sm:text-[25px] leading-tight mb-3">
                 {project.name}
               </h2>
+
+              {project.date && (
+                <p className="text-ink-soft text-[13px] mb-3">
+                  {project.date}
+                </p>
+              )}
 
               <p className="text-ink-soft text-[14.5px] leading-relaxed max-w-[62ch] mb-5">
                 {project.desc}
@@ -174,6 +197,7 @@ export default function Projects() {
             </div>
 
             {/* Project visual */}
+            {project.image && (
             <div className="order-first md:order-none">
               <div
                 className="
@@ -218,9 +242,93 @@ export default function Projects() {
                 />
               </div>
             </div>
+            )}
           </article>
         ))}
       </div>
+
+      {otherProjects.length > 0 && (
+        <section
+          aria-labelledby="more-projects-heading"
+          className="mt-4 rounded-[24px] border border-line bg-card/50 p-5 sm:p-7"
+        >
+          <div className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
+            <h2
+              id="more-projects-heading"
+              className="font-serif text-[23px] sm:text-[25px]"
+            >
+              More projects
+            </h2>
+            <p id="more-projects-hint" className="text-[12px] text-ink-soft">
+              Scroll to explore <span aria-hidden="true">→</span>
+            </p>
+          </div>
+
+          <div
+            role="region"
+            aria-labelledby="more-projects-heading"
+            aria-describedby="more-projects-hint"
+            tabIndex={0}
+            className="flex gap-5 overflow-x-auto overscroll-x-contain snap-x snap-proximity pb-4 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink-soft"
+          >
+            {otherProjects.map((project, index) => (
+              <article
+                key={project.name}
+                className="flex w-[85%] min-w-0 shrink-0 snap-start flex-col overflow-hidden rounded-[18px] border border-line bg-card sm:w-[320px]"
+              >
+                {project.image && (
+                  <div className="flex h-40 items-center justify-center border-b border-line p-3">
+                    <img
+                      src={project.image}
+                      alt={project.imageAlt}
+                      loading="lazy"
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+                )}
+
+                <div className="flex flex-1 flex-col p-5">
+                  <span className="mb-3 text-[11px] uppercase tracking-[0.14em] text-ink-soft">
+                    {String(index + featuredProjects.length + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mb-3 font-serif text-[21px] leading-tight">
+                    {project.name}
+                  </h3>
+                  {project.date && (
+                    <p className="mb-3 text-[12px] text-ink-soft">{project.date}</p>
+                  )}
+                  <p className="mb-5 text-[13px] leading-relaxed text-ink-soft">
+                    {project.desc}
+                  </p>
+                  <div className="mb-5 flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-line px-2.5 py-1 text-[11px] text-ink-soft"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  {project.links.length > 0 && (
+                    <div className="mt-auto flex gap-5 text-[13px]">
+                      {project.links.map((link) => (
+                        <a
+                          key={link.label}
+                          href={link.href}
+                          className="border-b border-ink-soft/40 text-ink transition-colors hover:border-ink"
+                        >
+                          {link.label}<span className="ml-1">↗</span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <div className="border-t border-line mt-16 pt-8 pb-4">
