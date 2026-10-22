@@ -62,10 +62,11 @@ const projects: {
       "RxJS",
       "Functional Programming",
     ],
+    video: "/Guitar_Hero.mp4",
     image: "/guitar-hero.png",
     imageAlt: "Guitar Hero rhythm game project",
     links: [
-      // { label: "Demo", href: "#" },
+      { label: "Code", href: "https://github.com/JiaJing04/Guitar-Hero" },
     ],
   },
 
@@ -110,11 +111,15 @@ export default function Projects() {
                   <video
                     src={project.video}
                     poster={project.image}
-                    controls
+                    autoPlay
+                    loop
+                    muted
                     playsInline
-                    preload="metadata"
+                    disablePictureInPicture
+                    preload="auto"
+                    tabIndex={-1}
                     aria-label={`${project.name} demonstration`}
-                    className="h-full w-full object-contain"
+                    className="pointer-events-none h-full w-full object-contain"
                   >
                     <a href={project.video}>Watch the {project.name} video</a>
                   </video>
