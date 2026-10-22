@@ -19,7 +19,7 @@ const config: Config = {
         beak: "var(--beak)",
       },
       fontFamily: {
-        serif: ["var(--font-serif)", "ui-serif", "Georgia", "serif"],
+        heading: ["var(--font-heading)", "ui-sans-serif", "system-ui", "sans-serif"],
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
     },

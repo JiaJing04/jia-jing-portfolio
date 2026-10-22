@@ -11,9 +11,10 @@ import NextjsOriginalIcon from "react-devicons/nextjs/original";
 import MysqlOriginalIcon from "react-devicons/mysql/original";
 import FirebaseOriginalIcon from "react-devicons/firebase/original";
 import GitOriginalIcon from "react-devicons/git/original";
-import GithubOriginalIcon from "react-devicons/github/original";
+import OracleOriginalIcon from "react-devicons/oracle/original";
+import ApacheKafkaOriginalIcon from "react-devicons/apachekafka/original";
+import RedisOriginalIcon from "react-devicons/redis/original";
 import JiraOriginalIcon from "react-devicons/jira/original";
-import PostmanOriginalIcon from "react-devicons/postman/original";
 import Html5OriginalIcon from "react-devicons/html5/original";
 import Css3OriginalIcon from "react-devicons/css3/original";
 import MongodbOriginalIcon from "react-devicons/mongodb/original";
@@ -50,6 +51,14 @@ type Skill = readonly [
    GENERIC ICONS
 ========================================================= */
 
+const genericIconColors: Record<GenericIconType, string> = {
+  sql: "#2563eb",
+  microservices: "#7c3aed",
+  api: "#0f766e",
+  cicd: "#c2410c",
+  agile: "#15803d",
+};
+
 function GenericIcon({
   type,
 }: {
@@ -60,7 +69,7 @@ function GenericIcon({
     height: 27,
     viewBox: "0 0 24 24",
     fill: "none",
-    stroke: "currentColor",
+    stroke: genericIconColors[type],
     strokeWidth: 1.6,
     strokeLinecap: "round" as const,
     strokeLinejoin: "round" as const,
@@ -169,31 +178,32 @@ function SkillIcon({
 
 const skillsRow1: Skill[] = [
   ["Java", JavaOriginalIcon],
+  ["Spring Boot", SpringOriginalIcon],
+  ["SQL", "sql"],
   ["Python", PythonOriginalIcon],
   ["JavaScript", JavascriptOriginalIcon],
-  ["Spring Boot", SpringOriginalIcon],
   ["React.js", ReactOriginalIcon],
   ["Next.js", NextjsOriginalIcon],
-  ["MySQL", MysqlOriginalIcon],
 ];
 
 const skillsRow2: Skill[] = [
-  ["SQL", "sql"],
+  ["MySQL", MysqlOriginalIcon],
+  ["Oracle Database", OracleOriginalIcon],
+  ["Firebase", FirebaseOriginalIcon],
+  ["MongoDB", MongodbOriginalIcon],
   ["Microservices", "microservices"],
   ["REST APIs", "api"],
-  ["Firebase", FirebaseOriginalIcon],
   ["Git", GitOriginalIcon],
-  ["Jira", JiraOriginalIcon],
 ];
 
 const skillsRow3: Skill[] = [
-  ["Postman", PostmanOriginalIcon],
+  ["Apache Kafka", ApacheKafkaOriginalIcon],
+  ["Redis", RedisOriginalIcon],
   ["HTML", Html5OriginalIcon],
   ["CSS", Css3OriginalIcon],
-  ["GitHub", GithubOriginalIcon],
-  ["MongoDB", MongodbOriginalIcon],
   ["CI/CD", "cicd"],
   ["Agile", "agile"],
+  ["Jira", JiraOriginalIcon],
 ];
 
 /* =========================================================
@@ -255,7 +265,7 @@ export default function About() {
           {/* About text */}
 
           <div className="pt-1">
-            <h1 className="font-serif italic text-[32px] mb-8">
+            <h1 className="font-heading font-medium text-[32px] mb-8">
               About
             </h1>
 
@@ -333,7 +343,7 @@ export default function About() {
                 {/* Name */}
 
                 <div className="absolute bottom-[14px] left-0 right-0 text-center">
-                  <span className="font-serif italic text-[14px] text-neutral-600">
+                  <span className="font-heading font-medium text-[14px] text-neutral-600">
                     
                   </span>
                 </div>
@@ -350,7 +360,7 @@ export default function About() {
 
       <section className="border-t border-line mt-20 pt-10">
 
-        <h2 className="font-serif text-[22px] mb-9">
+        <h2 className="font-heading font-medium text-[22px] mb-9">
           Education
         </h2>
 
@@ -369,7 +379,7 @@ export default function About() {
             <div>
               <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
 
-                <h3 className="text-[16px] font-medium">
+                <h3 className="font-heading text-[16px] font-medium">
                   Monash University Malaysia
                 </h3>
 
@@ -403,7 +413,7 @@ export default function About() {
             <div>
               <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
 
-                <h3 className="text-[16px] font-medium">
+                <h3 className="font-heading text-[16px] font-medium">
                   Sunway College
                 </h3>
 
@@ -438,7 +448,7 @@ export default function About() {
             <div>
               <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
 
-                <h3 className="text-[16px] font-medium">
+                <h3 className="font-heading text-[16px] font-medium">
                   SMK Sultan Omar
                 </h3>
 
@@ -465,7 +475,7 @@ export default function About() {
       <section className="border-t border-line mt-20 pt-10">
 
         <div className="mb-10">
-          <h2 className="font-serif text-[22px]">
+          <h2 className="font-heading font-medium text-[22px]">
             Skills
           </h2>
 
@@ -744,18 +754,6 @@ export default function About() {
         `}</style>
 
       </section>
-
-      {/* =====================================================
-          BOTTOM
-      ====================================================== */}
-
-      <div className="border-t border-line mt-20 pt-8 pb-4">
-
-        <p className="text-[13px] text-ink-soft">
-          Thanks for stopping by.
-        </p>
-
-      </div>
 
     </main>
   );

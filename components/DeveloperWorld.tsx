@@ -43,32 +43,39 @@ function useTouchSelection(id: string) {
 }
 
 const C = {
-  desk: "#e4e0d5",
-  mat: "#d6cfd6",
-  lid: "#eae8e3",
-  base: "#efeee9",
-  key: "#fbfaf7",
-  pad: "#dcdad3",
-  screen: "#333c47",
+  desk: "#bdcde2",
+  deskEdge: "#91a7c4",
+  mat: "#a6b3db",
+  lid: "#e3eaf2",
+  base: "#d9e3ef",
+  key: "#f3f7fc",
+  pad: "#becde0",
+  screen: "#29384f",
 
-  cup: "#a9c4d9",
-  saucer: "#f2f0e9",
-  tea: "#8a7360",
+  cup: "#91b5d5",
+  saucer: "#f3f7fc",
+  tea: "#434a56",
 
-  strap: "#c3b5e3",
-  clip: "#c9cbd0",
+  strap: "#a59ad4",
+  clip: "#b8c7d9",
 
-  badge: "#f5f3ec",
-  badgeBand: "#ecb9ae",
-  badgeSlot: "#cfcac0",
+  badge: "#f3f7fc",
+  badgeBand: "#a6bedd",
+  badgeSlot: "#91a7c4",
 
-  panel: "#d7e0e6",
-  trim: "#d9d4c8",
-  wood: "#b7a68f",
+  panel: "#dce7f2",
+  trim: "#b5c7dc",
+  peg: "#a4b3c7",
 
-  lampBase: "#d6d2c8",
-  lampPole: "#aca595",
-  lampShade: "#f5f1e6",
+  lampBase: "#f3f7fc",
+  lampPole: "#a4b3c7",
+  lampShade: "#f3f7fc",
+
+  paper: "#f3f7fc",
+  tape: "#c7d7e8",
+  lavender: "#c8c2e6",
+  mint: "#b9d9d2",
+  blue: "#a6bedd",
 };
 
 /* =========================================================
@@ -129,13 +136,13 @@ function Blob({
    ========================================================= */
 
 const CODE_LINES = [
-  { indent: 0, width: 0.8, color: "#c9b8ea" },
-  { indent: 1, width: 1.2, color: "#eab6a8" },
-  { indent: 1, width: 0.9, color: "#a9cf9f" },
-  { indent: 2, width: 1.1, color: "#e8e4da" },
-  { indent: 2, width: 0.65, color: "#a7cde3" },
-  { indent: 1, width: 0.5, color: "#eab6a8" },
-  { indent: 0, width: 0.3, color: "#c9b8ea" },
+  { indent: 0, width: 0.8, color: C.lavender },
+  { indent: 1, width: 1.2, color: C.mint },
+  { indent: 1, width: 0.9, color: C.blue },
+  { indent: 2, width: 1.1, color: C.paper },
+  { indent: 2, width: 0.65, color: C.blue },
+  { indent: 1, width: 0.5, color: C.mint },
+  { indent: 0, width: 0.3, color: C.lavender },
 ];
 
 function Keys() {
@@ -196,7 +203,8 @@ function Laptop() {
       >
         <meshStandardMaterial
           color={C.base}
-          roughness={0.55}
+          roughness={0.42}
+          metalness={0.2}
         />
       </RoundedBox>
 
@@ -223,6 +231,7 @@ function Laptop() {
         <meshStandardMaterial
           color={C.pad}
           roughness={0.5}
+          metalness={0.15}
         />
       </RoundedBox>
 
@@ -241,7 +250,8 @@ function Laptop() {
         >
           <meshStandardMaterial
             color={C.lid}
-            roughness={0.5}
+            roughness={0.4}
+            metalness={0.2}
           />
         </RoundedBox>
 
@@ -313,7 +323,7 @@ function TeaCup() {
         />
         <meshStandardMaterial
           color={C.saucer}
-          roughness={0.6}
+          roughness={0.4}
         />
       </mesh>
 
@@ -329,7 +339,7 @@ function TeaCup() {
           />
           <meshStandardMaterial
             color={C.cup}
-            roughness={0.5}
+            roughness={0.32}
             side={THREE.DoubleSide}
           />
         </mesh>
@@ -345,7 +355,7 @@ function TeaCup() {
           />
           <meshStandardMaterial
             color={C.cup}
-            roughness={0.5}
+            roughness={0.32}
           />
         </mesh>
 
@@ -374,7 +384,7 @@ function TeaCup() {
           />
           <meshStandardMaterial
             color={C.cup}
-            roughness={0.5}
+            roughness={0.32}
           />
         </mesh>
       </group>
@@ -520,8 +530,9 @@ function Lanyard() {
             args={[0.045, 0.045, 0.18, 20]}
           />
           <meshStandardMaterial
-            color={C.wood}
-            roughness={0.8}
+            color={C.peg}
+            roughness={0.45}
+            metalness={0.25}
           />
         </mesh>
 
@@ -531,8 +542,9 @@ function Lanyard() {
         >
           <sphereGeometry args={[0.07, 24, 16]} />
           <meshStandardMaterial
-            color={C.wood}
-            roughness={0.8}
+            color={C.peg}
+            roughness={0.45}
+            metalness={0.25}
           />
         </mesh>
 
@@ -774,7 +786,7 @@ function Lanyard() {
                 args={[0.19, 0.028, 0.004]}
               />
               <meshStandardMaterial
-                color="#c9b8ea"
+                color={C.lavender}
                 roughness={0.8}
               />
             </mesh>
@@ -792,7 +804,7 @@ function Lanyard() {
 function PhotoStrip({
   position,
   rotation = 0,
-  frameColor = "#fbfaf6",
+  frameColor = C.paper,
   photoColors,
 }: {
   position: V3;
@@ -825,7 +837,7 @@ function PhotoStrip({
       >
         <boxGeometry args={[0.15, 0.045, 0.004]} />
         <meshStandardMaterial
-          color="#f0e2d4"
+          color={C.tape}
           roughness={0.9}
           transparent
           opacity={0.85}
@@ -914,10 +926,10 @@ function PhotoStrips() {
         position={[1.0, 1.2, -1.94]}
         rotation={-0.05}
         photoColors={[
-          "#ecb9ae",
-          "#c3b5e3",
-          "#a9c4d9",
-          "#f0d9c9",
+          C.lavender,
+          C.mint,
+          C.blue,
+          C.mat,
         ]}
       />
 
@@ -925,10 +937,10 @@ function PhotoStrips() {
         position={[1.44, 1.25, -1.94]}
         rotation={0.07}
         photoColors={[
-          "#d6cfd6",
-          "#ecb9ae",
-          "#c3b5e3",
-          "#a9c4d9",
+          C.blue,
+          C.strap,
+          C.mint,
+          C.lavender,
         ]}
       />
 
@@ -979,19 +991,19 @@ const BOOKS: {
     size: [1.2, 0.16, 0.84],
     y: 0.08,
     rot: 0.05,
-    color: "#a9c1a1",
+    color: C.lavender,
   },
   {
     size: [1.05, 0.15, 0.76],
     y: 0.235,
     rot: -0.12,
-    color: "#f0c7b0",
+    color: C.mint,
   },
   {
     size: [0.92, 0.14, 0.68],
     y: 0.38,
     rot: 0.1,
-    color: "#b5c9dc",
+    color: C.blue,
   },
 ];
 
@@ -1032,7 +1044,7 @@ function Books() {
             />
 
             <meshStandardMaterial
-              color="#f7f1e6"
+              color={C.paper}
               roughness={1}
             />
           </mesh>
@@ -1438,7 +1450,8 @@ function DeskLamp() {
 
         <meshStandardMaterial
           color={C.lampPole}
-          roughness={0.6}
+          roughness={0.4}
+          metalness={0.35}
         />
       </mesh>
 
@@ -1455,7 +1468,8 @@ function DeskLamp() {
 
           <meshStandardMaterial
             color={C.lampPole}
-            roughness={0.6}
+            roughness={0.4}
+            metalness={0.35}
           />
         </mesh>
 
@@ -1491,7 +1505,7 @@ function DeskLamp() {
           />
 
           <meshBasicMaterial
-            color="#fff3cf"
+            color="#ffffff"
           />
         </mesh>
       </group>
@@ -1724,7 +1738,7 @@ function World() {
       <hemisphereLight
         args={[
           "#ffffff",
-          "#d3d1c7",
+          "#c9d5e7",
           1.4,
         ]}
       />
@@ -1732,7 +1746,7 @@ function World() {
       <directionalLight
         position={[4, 7, 5]}
         intensity={2.0}
-        color="#fdf8f4"
+        color="#ffffff"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -1749,7 +1763,7 @@ function World() {
       <directionalLight
         position={[-5, 3, -2]}
         intensity={0.5}
-        color="#dfe8ff"
+        color="#e3ebff"
       />
 
       {/* =================================================
@@ -1762,10 +1776,25 @@ function World() {
             ================================================= */}
 
         <RoundedBox
-          args={[6.6, 0.4, 4.2]}
-          radius={0.16}
+          args={[6.6, 0.32, 4.2]}
+          radius={0.14}
           smoothness={6}
-          position={[0, -0.2, 0]}
+          position={[0, -0.24, 0]}
+          receiveShadow
+          castShadow
+        >
+          <meshStandardMaterial
+            color={C.deskEdge}
+            roughness={0.92}
+          />
+        </RoundedBox>
+
+        {/* The lighter top meets the existing y = 0 desk surface. */}
+        <RoundedBox
+          args={[6.6, 0.12, 4.2]}
+          radius={0.055}
+          smoothness={6}
+          position={[0, -0.06, 0]}
           receiveShadow
           castShadow
         >
@@ -1834,18 +1863,10 @@ function World() {
         <Books />
 
         {/* =================================================
-            EXPERIENCE
+            LANYARD
             ================================================= */}
 
-        <Hoverable
-          href="/experience"
-          label="Click to see my experience"
-          pivot={[2.5, 1.7, -1.96]}
-          labelPosition={[2.5, 2.3, -1.9]}
-          hoverScale={1.05}
-        >
-          <Lanyard />
-        </Hoverable>
+        <Lanyard />
 
         {/* =================================================
             ABOUT / CAPYBARA
@@ -1872,7 +1893,7 @@ function World() {
           blur={2.2}
           far={1.6}
           resolution={512}
-          color="#7a6a55"
+          color="#7388a4"
         />
 
         <ContactShadows
@@ -1882,7 +1903,7 @@ function World() {
           blur={3.2}
           far={0.5}
           resolution={256}
-          color="#6b5d4b"
+          color="#627996"
         />
       </Stage>
     </>

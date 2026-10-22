@@ -1,3 +1,5 @@
+import { FaGithub } from "react-icons/fa";
+
 const projects: {
   name: string;
   desc: string;
@@ -5,11 +7,13 @@ const projects: {
   tags: string[];
   image?: string;
   imageAlt?: string;
+  // Set a video path to show a player; image becomes its optional poster.
+  video?: string;
   links: { label: string; href: string }[];
 }[] = [
   {
     name: "Academic Dashboard Website",
-    desc: "A classroom analytics platform that transforms lecturer-uploaded datasets into interactive dashboards and reports, covering attendance, engagement, and at-risk student analysis.",
+    desc: "A classroom analytics dashboard for tracking attendance, engagement, and at-risk students.",
     tags: [
       "Java",
       "Spring Boot",
@@ -23,10 +27,11 @@ const projects: {
   },
 
   {
-    name: "Ticket to Ride – Java Application",
-    desc: "A Java-based implementation of the Ticket to Ride board game, featuring object-oriented architecture, SOLID principles, and extensible game logic developed across 3 Agile sprints.",
+    name: "Ticket To Ride",
+    desc: "A Java adaptation of the board game with extensible, object-oriented game logic.",
     tags: [
       "Java",
+      "Java Swing",
       "OOP",
       "SOLID",
       "Design Patterns",
@@ -40,7 +45,7 @@ const projects: {
 
   {
     name: "Run Monash Database System",
-    desc: "A database system built around a real-world case study, using Oracle SQL and PL/SQL functions, triggers, and stored procedures to enforce business rules and data integrity. Populated and queried Oracle and MongoDB databases to meet complex user requirements, applying relational algebra, transaction management, and JSON document transformation across relational and non-relational models.",
+    desc: "An Oracle and MongoDB database project covering business rules, data integrity, and complex queries.",
     tags: ["Oracle SQL", "MongoDB", "PL/SQL"],
     image: "/run-monash.png", 
     imageAlt: "Run Monash Database System",
@@ -51,12 +56,11 @@ const projects: {
 
   {
     name: "Guitar Hero",
-    desc: "An interactive rhythm game built with TypeScript using Functional Reactive Programming and the MVC design pattern. RxJS Observable streams manage animations, user interactions, and event timing for responsive gameplay.",
+    desc: "A TypeScript rhythm game powered by RxJS and functional reactive programming.",
     tags: [
       "TypeScript",
       "RxJS",
       "Functional Programming",
-      "MVC",
     ],
     image: "/guitar-hero.png",
     imageAlt: "Guitar Hero rhythm game project",
@@ -67,7 +71,7 @@ const projects: {
 
   {
     name: "Elden Thing",
-    desc: "A Java-based roguelike set in a dark-fantasy world, featuring NPC interactions, magical item collection, trading, and an extensible game world built around SOLID object-oriented principles.",
+    desc: "A Java roguelike featuring NPC interactions, item collection, and trading.",
     tags: [
       "Java",
       "OOP",
@@ -80,261 +84,98 @@ const projects: {
     ],
   },
 
-  {
-    name: "Kanban Task Manager",
-    desc: "A web-based task management platform, featuring drag-and-drop task management, team assignments, deadlines, and visual project tracking. Developed iteratively using Agile methodology and sprint-based feedback.",
-    tags: [
-      "Web Development",
-      "JavaScript",
-      "HTML/CSS",
-      "Agile",
-    ],
-    image: "/kanban.png",
-    imageAlt: "Kanban Task Manager project",
-    links: [],
-  },
 ];
 
 export default function Projects() {
-  const featuredProjects = projects.slice(0, 3);
-  const otherProjects = projects.slice(3);
-
   return (
     <main className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-12 py-14 sm:py-16">
-      {/* Header */}
-      <div className="mb-14">
-        <h1 className="font-serif italic text-[32px] mb-3">
+      <div className="mb-10 sm:mb-12">
+        <h1 className="font-heading font-medium text-[32px] mb-3">
           Projects
         </h1>
-
         <p className="text-ink-soft text-[15px] leading-relaxed max-w-[58ch]">
           A few things I&apos;ve built while exploring software and systems.
         </p>
       </div>
 
-      {/* Projects */}
-      <div className="space-y-12">
-        {featuredProjects.map((project, index) => (
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
+        {projects.map((project, index) => (
           <article
             key={project.name}
-            className={`
-              grid
-              ${project.image ? "md:grid-cols-[minmax(0,1fr)_360px] lg:grid-cols-[minmax(0,1fr)_420px]" : ""}
-              gap-8
-              lg:gap-14
-              items-center
-              pb-12
-              ${
-                index !== featuredProjects.length - 1
-                  ? "border-b border-line"
-                  : ""
-              }
-            `}
+            className="group flex min-w-0 flex-col overflow-hidden rounded-[20px] border border-line bg-card transition-[transform,box-shadow,border-color] duration-200 ease-out hover:border-ink-soft/40 hover:shadow-[0_12px_28px_rgba(51,81,106,0.10)] focus-within:border-ink-soft/40 focus-within:shadow-[0_12px_28px_rgba(51,81,106,0.10)] motion-safe:hover:-translate-y-1 motion-safe:focus-within:-translate-y-1 motion-reduce:transition-none"
           >
-            {/* Project information */}
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-[11px] uppercase tracking-[0.14em] text-ink-soft">
-                  0{index + 1}
-                </span>
-
-                <span className="h-px w-8 bg-line" />
+            {(project.video || project.image) && (
+              <div className="flex h-56 items-center justify-center overflow-hidden border-b border-line p-4">
+                {project.video ? (
+                  <video
+                    src={project.video}
+                    poster={project.image}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    aria-label={`${project.name} demonstration`}
+                    className="h-full w-full object-contain"
+                  >
+                    <a href={project.video}>Watch the {project.name} video</a>
+                  </video>
+                ) : (
+                  <img
+                    src={project.image}
+                    alt={project.imageAlt || project.name}
+                    loading={index < 2 ? "eager" : "lazy"}
+                    className="h-full w-full object-contain transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.025] motion-safe:group-focus-within:scale-[1.025] motion-reduce:transition-none"
+                  />
+                )}
               </div>
+            )}
 
-              <h2 className="font-serif text-[23px] sm:text-[25px] leading-tight mb-3">
-                {project.name}
-              </h2>
-
+            <div className="flex flex-1 flex-col p-5 sm:p-6">
+              <div className="mb-3 flex items-start justify-between gap-3">
+                <h2 className="min-w-0 font-heading font-medium text-[21px] sm:text-[23px] leading-tight">
+                  {project.name}
+                </h2>
+                {project.links.length > 0 && (
+                  <div className="-mt-1.5 -mr-2 flex shrink-0 items-center gap-2 text-[13px]">
+                    {project.links.map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        aria-label={link.label === "Code" ? `View ${project.name} on GitHub` : `${link.label} for ${project.name}`}
+                        title={link.label === "Code" ? "View code on GitHub" : link.label}
+                        className={link.label === "Code"
+                          ? "inline-flex h-11 w-11 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-paper hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
+                          : "rounded-sm border-b border-ink-soft/40 text-ink transition-colors hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"}
+                      >
+                        {link.label === "Code" ? (
+                          <FaGithub size={22} aria-hidden="true" />
+                        ) : (
+                          <>{link.label}<span aria-hidden="true" className="ml-1">↗</span></>
+                        )}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
               {project.date && (
-                <p className="text-ink-soft text-[13px] mb-3">
-                  {project.date}
-                </p>
+                <p className="mb-3 text-[12px] text-ink-soft">{project.date}</p>
               )}
-
-              <p className="text-ink-soft text-[14.5px] leading-relaxed max-w-[62ch] mb-5">
+              <p className="text-[14px] leading-relaxed text-ink-soft">
                 {project.desc}
               </p>
 
-              {/* Tags */}
-              <div className="flex gap-2 flex-wrap mb-6">
+              <div className="mt-5 flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="
-                      text-[11.5px]
-                      px-2.5
-                      py-1
-                      rounded-full
-                      border
-                      border-line
-                      text-ink-soft
-                    "
+                    className="rounded-full border border-line px-2.5 py-1 text-[11px] text-ink-soft"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
-
-              {/* Links */}
-              <div className="text-[13px] flex gap-5">
-                {project.links.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className="
-                      text-ink
-                      border-b
-                      border-ink-soft/40
-                      hover:border-ink
-                      transition-colors
-                    "
-                  >
-                    {link.label}
-                    <span className="ml-1">↗</span>
-                  </a>
-                ))}
-              </div>
             </div>
-
-            {/* Project visual */}
-            {project.image && (
-            <div className="order-first md:order-none">
-              <div
-                className="
-      group
-      relative
-      overflow-hidden
-      rounded-[20px]
-      border
-      border-line
-      bg-card
-      p-3
-                "
-              >
-                <img
-                  src={project.image}
-                  alt={project.imageAlt}
-                  className="
-          block
-          w-full
-          h-auto
-          object-contain
-          transition-transform
-          duration-500
-          group-hover:scale-[1.015]
-                  "
-                />
-
-                {/* subtle overlay */}
-                <div
-                  className="
-        pointer-events-none
-        absolute
-        inset-0
-        bg-gradient-to-t
-        from-black/5
-        via-transparent
-        to-transparent
-        opacity-0
-        group-hover:opacity-100
-        transition-opacity
-                  "
-                />
-              </div>
-            </div>
-            )}
           </article>
         ))}
-      </div>
-
-      {otherProjects.length > 0 && (
-        <section
-          aria-labelledby="more-projects-heading"
-          className="mt-4 rounded-[24px] border border-line bg-card/50 p-5 sm:p-7"
-        >
-          <div className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
-            <h2
-              id="more-projects-heading"
-              className="font-serif text-[23px] sm:text-[25px]"
-            >
-              More projects
-            </h2>
-            <p id="more-projects-hint" className="text-[12px] text-ink-soft">
-              Scroll to explore <span aria-hidden="true">→</span>
-            </p>
-          </div>
-
-          <div
-            role="region"
-            aria-labelledby="more-projects-heading"
-            aria-describedby="more-projects-hint"
-            tabIndex={0}
-            className="flex gap-5 overflow-x-auto overscroll-x-contain snap-x snap-proximity pb-4 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink-soft"
-          >
-            {otherProjects.map((project, index) => (
-              <article
-                key={project.name}
-                className="flex w-[85%] min-w-0 shrink-0 snap-start flex-col overflow-hidden rounded-[18px] border border-line bg-card sm:w-[320px]"
-              >
-                {project.image && (
-                  <div className="flex h-40 items-center justify-center border-b border-line p-3">
-                    <img
-                      src={project.image}
-                      alt={project.imageAlt}
-                      loading="lazy"
-                      className="h-full w-full object-contain"
-                    />
-                  </div>
-                )}
-
-                <div className="flex flex-1 flex-col p-5">
-                  <span className="mb-3 text-[11px] uppercase tracking-[0.14em] text-ink-soft">
-                    {String(index + featuredProjects.length + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mb-3 font-serif text-[21px] leading-tight">
-                    {project.name}
-                  </h3>
-                  {project.date && (
-                    <p className="mb-3 text-[12px] text-ink-soft">{project.date}</p>
-                  )}
-                  <p className="mb-5 text-[13px] leading-relaxed text-ink-soft">
-                    {project.desc}
-                  </p>
-                  <div className="mb-5 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-line px-2.5 py-1 text-[11px] text-ink-soft"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  {project.links.length > 0 && (
-                    <div className="mt-auto flex gap-5 text-[13px]">
-                      {project.links.map((link) => (
-                        <a
-                          key={link.label}
-                          href={link.href}
-                          className="border-b border-ink-soft/40 text-ink transition-colors hover:border-ink"
-                        >
-                          {link.label}<span className="ml-1">↗</span>
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Footer */}
-      <div className="border-t border-line mt-16 pt-8 pb-4">
-        <p className="text-[13px] text-ink-soft">
-          More experiments and side projects to come.
-        </p>
       </div>
     </main>
   );

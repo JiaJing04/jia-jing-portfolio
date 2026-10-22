@@ -1,154 +1,82 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const links = [
   { href: "/projects", label: "Projects" },
-  { href: "/experience", label: "Experience" },
   { href: "/about", label: "About" },
 ];
 
 export default function Nav() {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const dismissOutside = (event: PointerEvent) => {
+      if (!headerRef.current?.contains(event.target as Node)) {
+        setMobileMenuOpen(false);
+      }
+    };
+    const dismissOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const dismissOnDesktop = () => {
+      if (desktop.matches) setMobileMenuOpen(false);
+    };
+
+    document.addEventListener("pointerdown", dismissOutside);
+    document.addEventListener("keydown", dismissOnEscape);
+    desktop.addEventListener("change", dismissOnDesktop);
+    return () => {
+      document.removeEventListener("pointerdown", dismissOutside);
+      document.removeEventListener("keydown", dismissOnEscape);
+      desktop.removeEventListener("change", dismissOnDesktop);
+    };
+  }, [mobileMenuOpen]);
 
   return (
-    <header className="border-b border-line">
-      <style>{`
-        /* -----------------------------------------------
-           JJ LOGO
-           A filled circle with the letters cut out
-           (the page shows through the letters).
-
-           Hover: the fill becomes a slowly moving, muted
-           colour shine. The letters stay cut out.
-        ------------------------------------------------ */
-
-        .monogram {
-          display: block;
-          width: 42px;
-          height: 42px;
-          overflow: visible;
-          transition: filter 300ms ease;
-        }
-
-        .monogram-base {
-          fill: var(--ink);
-        }
-
-        .monogram-shine {
-          opacity: 0;
-          transition: opacity 250ms ease;
-          transform-box: fill-box;
-          transform-origin: center;
-        }
-
-        .group:hover .monogram {
-          filter: drop-shadow(0 0 8px rgba(184, 147, 90, 0.35));
-        }
-
-        .group:hover .monogram-shine {
-          opacity: 1;
-          animation: monogram-spin 4s linear infinite;
-        }
-
-        @keyframes monogram-spin {
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .group:hover .monogram-shine {
-            animation: none;
-          }
-        }
-      `}</style>
-
-      <div className="max-w-[1200px] mx-auto px-6 sm:px-8 py-5 flex items-center justify-between">
-        {/* Logo */}
+    <header ref={headerRef} className="bg-paper border-b border-line">
+      <div className="max-w-[1200px] min-h-[84px] mx-auto px-6 sm:px-10 lg:px-12 py-4 flex items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr]">
+        {/* Avatar */}
         <Link
           href="/"
           aria-label="Jia Jing — Home"
-          className="group flex items-center"
+          onClick={() => setMobileMenuOpen(false)}
+          className="group flex shrink-0 items-center justify-self-start rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
         >
-          <svg
-            className="monogram"
-            viewBox="0 0 42 42"
+          <span
             aria-hidden="true"
+            className="block h-[52px] w-[42px] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:-rotate-3 group-focus-visible:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none"
           >
-            <defs>
-              {/* Cut-out: white = visible, black = removed */}
-              <mask id="jj-cutout">
-                <rect
-                  width="42"
-                  height="42"
-                  fill="white"
-                />
-                <text
-                  x="21"
-                  y="21.5"
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fill="black"
-                  fontSize="19"
-                  fontWeight="800"
-                  letterSpacing="-1.2"
-                  style={{
-                    fontFamily:
-                      'var(--font-sans, system-ui, -apple-system, "Segoe UI", Arial, sans-serif)',
-                  }}
-                >
-                  JJ
-                </text>
-              </mask>
-
-              <clipPath id="jj-circle">
-                <circle cx="21" cy="21" r="21" />
-              </clipPath>
-
-              {/* Muted colours that suit the paper / ink theme */}
-              <linearGradient
-                id="jj-shine"
-                x1="0"
-                y1="0"
-                x2="1"
-                y2="1"
-              >
-                <stop offset="0%" stopColor="#b8935a" />
-                <stop offset="30%" stopColor="#c9826b" />
-                <stop offset="60%" stopColor="#a98aa5" />
-                <stop offset="85%" stopColor="#7f9a94" />
-                <stop offset="100%" stopColor="#b8935a" />
-              </linearGradient>
-            </defs>
-
-            <g mask="url(#jj-cutout)">
-              {/* Solid ink circle (resting state) */}
-              <circle
-                className="monogram-base"
-                cx="21"
-                cy="21"
-                r="21"
-              />
-
-              {/* Colour shine (fades in on hover) */}
-              <g clipPath="url(#jj-circle)">
-                <rect
-                  className="monogram-shine"
-                  x="-11"
-                  y="-11"
-                  width="64"
-                  height="64"
-                  fill="url(#jj-shine)"
-                />
-              </g>
-            </g>
-          </svg>
+            <Image
+              src="/logo.png"
+              alt=""
+              width={973}
+              height={1369}
+              sizes="42px"
+              priority
+              className="h-full w-full object-contain [clip-path:inset(0_0_12%_0)]"
+            />
+          </span>
         </Link>
 
         {/* Navigation */}
-        <nav className="hidden sm:flex items-center gap-7 text-[13px] tracking-wide">
+        <nav aria-label="Main navigation" className="hidden md:flex items-center gap-7 text-[13px] tracking-wide">
           {links.map((link) => {
             const active = pathname === link.href;
 
@@ -156,6 +84,7 @@ export default function Nav() {
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={active ? "page" : undefined}
                 className={`uppercase pb-0.5 border-b ${
                   active
                     ? "border-ink text-ink"
@@ -169,14 +98,14 @@ export default function Nav() {
         </nav>
 
         {/* Right side */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4 justify-self-end">
           {/* Resume */}
           <a
             href="/resume.pdf"
             download
             className="
               hidden
-              sm:inline-flex
+              md:inline-flex
               items-center
               gap-1.5
               rounded-full
@@ -198,14 +127,14 @@ export default function Nav() {
           </a>
 
           {/* Social links */}
-          <div className="flex items-center gap-4 text-ink-soft">
+          <div className="flex items-center gap-1 md:gap-4 text-ink-soft">
             {/* GitHub */}
             <a
               href="https://github.com/JiaJing04"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="hover:text-ink transition-colors"
+              className="inline-flex h-11 w-11 md:h-auto md:w-auto items-center justify-center hover:text-ink transition-colors"
             >
               <svg
                 width="18"
@@ -228,7 +157,7 @@ export default function Nav() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="hover:text-ink transition-colors"
+              className="inline-flex h-11 w-11 md:h-auto md:w-auto items-center justify-center hover:text-ink transition-colors"
             >
               <svg
                 width="18"
@@ -245,7 +174,7 @@ export default function Nav() {
             <a
               href="mailto:jiajinghew@gmail.com"
               aria-label="Email"
-              className="hover:text-ink transition-colors"
+              className="inline-flex h-11 w-11 md:h-auto md:w-auto items-center justify-center hover:text-ink transition-colors"
             >
               <svg
                 width="18"
@@ -267,8 +196,69 @@ export default function Nav() {
               </svg>
             </a>
           </div>
+
+          <button
+            ref={menuButtonRef}
+            type="button"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line text-ink md:hidden hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              aria-hidden="true"
+            >
+              <path d={mobileMenuOpen ? "m6 6 12 12M6 18 18 6" : "M4 7h16M4 12h16M4 17h16"} />
+            </svg>
+          </button>
         </div>
       </div>
+
+      <nav
+        id="mobile-navigation"
+        aria-label="Mobile navigation"
+        hidden={!mobileMenuOpen}
+        className="border-t border-line md:hidden"
+      >
+        <div className="flex flex-col gap-1 px-6 py-4">
+          {[{ href: "/", label: "Home" }, ...links].map((link) => {
+            const active = pathname === link.href;
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex min-h-11 items-center rounded-lg px-3 py-3 text-[13px] uppercase tracking-wide focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${
+                  active
+                    ? "bg-card text-ink"
+                    : "text-ink-soft hover:bg-card hover:text-ink"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <a
+            href="/resume.pdf"
+            download
+            onClick={() => setMobileMenuOpen(false)}
+            className="mt-2 inline-flex min-h-11 items-center justify-between rounded-lg border border-line px-3 py-3 text-[12px] uppercase tracking-[0.1em] text-ink-soft hover:border-ink hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          >
+            Download résumé
+            <span aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </nav>
     </header>
   );
 }

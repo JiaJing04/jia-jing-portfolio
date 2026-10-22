@@ -2,18 +2,22 @@ import DeveloperWorld from "@/components/DeveloperWorldLoader";
 
 export default function Home() {
   return (
-    <main className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-12">
+    <main className="home-page max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-12">
       <section className="min-h-[calc(100vh-90px)] flex flex-col items-center pt-16 sm:pt-20">
         
         {/* Hero text */}
         <div className="text-center max-w-[700px]">
+          {/* <p className="mb-5 text-[12px] sm:text-[13px] font-medium uppercase tracking-[0.14em] text-ink-soft">
+            Software Developer
+          </p> */}
 
-          <h1 className="font-serif text-[clamp(42px,7vw,72px)] leading-[0.95] tracking-[-0.03em]">
+          <h1 className="font-heading font-medium text-[clamp(42px,7vw,72px)] leading-[1.05] tracking-[-0.03em]">
             Hi, I&apos;m Jia Jing.
           </h1>
 
           <p className="mt-6 text-[15px] sm:text-[16px] leading-relaxed text-ink-soft max-w-[500px] mx-auto">
-            I build software, solve problems, and have a questionable relationship with hot Milo.
+            Computer Science graduate from Monash University, focused on backend
+            development and building practical software.
           </p>
 
         </div>
